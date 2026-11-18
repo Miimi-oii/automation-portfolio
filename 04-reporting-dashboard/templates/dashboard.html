@@ -40,7 +40,7 @@
 
     .main { display: grid; grid-template-columns: 320px 1fr; gap: 24px; }
     .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
-    .card h3 { margin: 0 0 12px; font-size: 14px; color: var(--muted); }
+    .card h2 { margin: 0 0 12px; font-size: 14px; font-weight: 600; color: var(--muted); }
     .side-cards { display: flex; flex-direction: column; gap: 24px; }
     .goal-wrap { position: relative; display: flex; align-items: center; justify-content: center; }
     .goal-pct { position: absolute; font-size: 22px; font-weight: 700; }
@@ -86,19 +86,19 @@
       <div class="main">
         <div class="side-cards">
           <div class="card">
-            <h3>Revenue goal</h3>
+            <h2>Revenue goal</h2>
             <div class="goal-wrap">
               <canvas id="goalChart" width="160" height="160"></canvas>
               <div class="goal-pct">{{ goal_pct }}%</div>
             </div>
           </div>
           <div class="card">
-            <h3>Revenue by source</h3>
+            <h2>Revenue by source</h2>
             <canvas id="bySource"></canvas>
           </div>
         </div>
         <div class="card">
-          <h3>Revenue by day</h3>
+          <h2>Revenue by day</h2>
           <canvas id="byDay"></canvas>
         </div>
       </div>
