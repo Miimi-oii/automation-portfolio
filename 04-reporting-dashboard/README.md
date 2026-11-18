@@ -14,5 +14,9 @@ python main.py
 ```
 Open http://127.0.0.1:8100
 
+## Date filter + export
+Filter by date range with the From/To pickers (`?start=YYYY-MM-DD&end=YYYY-MM-DD`), then
+"Export CSV" downloads the same filtered rows.
+
 ## Portfolio pitch
 "On top of any automation pipeline — turns the raw data your sync/scraper collects into a live dashboard (revenue by source, by day, KPI tiles), so no one has to open a spreadsheet to see how the business is doing."

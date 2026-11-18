@@ -13,10 +13,26 @@
     .kpi .value { font-size: 28px; font-weight: 700; }
     .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
     .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+    .toolbar { display: flex; align-items: flex-end; gap: 12px; margin-bottom: 24px; }
+    .toolbar label { display: block; font-size: 13px; color: #4b5563; margin-bottom: 4px; }
+    .toolbar input[type=date] { padding: 8px 10px; border: 1px solid #d1d5db; border-radius: 8px; }
+    .toolbar button, .toolbar a.export {
+      padding: 9px 16px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600;
+      text-decoration: none; display: inline-block;
+    }
+    .toolbar button { background: #4f46e5; color: white; }
+    .toolbar a.export { background: #047857; color: white; }
   </style>
 </head>
 <body>
   <h1>Sales Dashboard</h1>
+
+  <form class="toolbar" method="get">
+    <div><label>From</label><input type="date" name="start" value="{{ start }}"></div>
+    <div><label>To</label><input type="date" name="end" value="{{ end }}"></div>
+    <button type="submit">Apply filter</button>
+    <a class="export" href="/export.csv?start={{ start }}&end={{ end }}">Export CSV</a>
+  </form>
 
   <div class="kpis">
     <div class="kpi"><div class="label">Total Revenue</div><div class="value">฿{{ total_revenue }}</div></div>
