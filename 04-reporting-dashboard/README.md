@@ -14,6 +14,12 @@ python main.py
 ```
 Open http://127.0.0.1:8100
 
+## CSV upload
+"Upload data" form (`/upload`) accepts a CSV with columns `date, source, amount`, validates
+column presence, date parsing, and that `amount` is numeric — rejects with a clear error
+message otherwise. Matches the "Excel/CSV import with validation" requirement seen in
+real Upwork dashboard job posts.
+
 ## Design
 Sidebar nav, icon-badged KPI cards, and a donut "revenue goal" chart — matching the
 common admin-dashboard layout pattern (sidebar + icon KPIs + a goal/progress ring).
