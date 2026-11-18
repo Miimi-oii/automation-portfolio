@@ -1,0 +1,9 @@
+supplier,owner,category,stage,due_date
+Siam Packaging,Anong,Packaging,Under Review,2026-11-10
+Krung Thai Supplies,Decha,Raw Material,Docs Requested,2026-11-15
+Bangkok Textile,Anong,Fabric,Approved,2026-11-05
+Chao Phraya Foods,Decha,Food,Not Started,2026-11-30
+Isan Hardware,Anong,Hardware,Under Review,2026-11-18
+Pattaya Logistics,Decha,Logistics,Docs Requested,2026-11-08
+Chiang Mai Crafts,Anong,Crafts,Rejected,2026-11-12
+Rayong Chemicals,Decha,Chemical,Under Review,2026-11-19
