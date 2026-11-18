@@ -9,6 +9,7 @@ from flask import Flask, render_template, request, Response
 
 app = Flask(__name__)
 DATA_FILE = "data.csv"
+REVENUE_TARGET = 20000
 
 
 def load_data() -> pd.DataFrame:
@@ -38,6 +39,8 @@ def dashboard():
     by_source = df.groupby("source")["amount"].sum().sort_values(ascending=False)
     by_day = df.groupby(df["date"].dt.strftime("%Y-%m-%d"))["amount"].sum().sort_index()
 
+    goal_pct = min(round(total_revenue / REVENUE_TARGET * 100), 100) if REVENUE_TARGET else 0
+
     return render_template(
         "dashboard.html",
         start=start,
@@ -45,6 +48,7 @@ def dashboard():
         total_revenue=f"{total_revenue:,.0f}",
         total_orders=total_orders,
         avg_order=f"{avg_order:,.0f}",
+        goal_pct=goal_pct,
         source_labels=list(by_source.index),
         source_values=[float(v) for v in by_source.values],
         day_labels=list(by_day.index),

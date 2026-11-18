@@ -14,6 +14,10 @@ python main.py
 ```
 Open http://127.0.0.1:8100
 
+## Design
+Sidebar nav, icon-badged KPI cards, and a donut "revenue goal" chart — matching the
+common admin-dashboard layout pattern (sidebar + icon KPIs + a goal/progress ring).
+
 ## Date filter + export
 Filter by date range with the From/To pickers (`?start=YYYY-MM-DD&end=YYYY-MM-DD`), then
 "Export CSV" downloads the same filtered rows.

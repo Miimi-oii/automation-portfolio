@@ -5,57 +5,122 @@
   <title>Sales Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
   <style>
-    body { font-family: system-ui, sans-serif; background: #f5f6fa; margin: 0; padding: 32px; color: #1a1a2e; }
+    :root { --ink: #1a1a2e; --muted: #4b5563; --bg: #f5f6fa; --accent: #4f46e5; }
+    * { box-sizing: border-box; }
+    body { font-family: system-ui, sans-serif; background: var(--bg); margin: 0; color: var(--ink); }
+    .layout { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+
+    .sidebar { background: #111827; color: #e5e7eb; padding: 24px 16px; }
+    .sidebar .brand { font-weight: 700; font-size: 18px; margin-bottom: 28px; padding-left: 8px; }
+    .sidebar nav a {
+      display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px;
+      color: #9ca3af; text-decoration: none; font-size: 14px; margin-bottom: 4px;
+    }
+    .sidebar nav a.active { background: var(--accent); color: white; }
+    .sidebar nav a .icon { width: 18px; text-align: center; }
+
+    .content { padding: 32px; }
     h1 { margin: 0 0 24px; }
-    .kpis { display: flex; gap: 16px; margin-bottom: 32px; }
-    .kpi { background: white; border-radius: 12px; padding: 20px 28px; box-shadow: 0 1px 3px rgba(0,0,0,.08); flex: 1; }
-    .kpi .label { font-size: 13px; color: #6b7280; margin-bottom: 6px; }
-    .kpi .value { font-size: 28px; font-weight: 700; }
-    .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
-    .toolbar { display: flex; align-items: flex-end; gap: 12px; margin-bottom: 24px; }
-    .toolbar label { display: block; font-size: 13px; color: #4b5563; margin-bottom: 4px; }
+
+    .toolbar { display: flex; align-items: flex-end; gap: 12px; margin-bottom: 32px; }
+    .toolbar label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
     .toolbar input[type=date] { padding: 8px 10px; border: 1px solid #d1d5db; border-radius: 8px; }
     .toolbar button, .toolbar a.export {
       padding: 9px 16px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600;
       text-decoration: none; display: inline-block;
     }
-    .toolbar button { background: #4f46e5; color: white; }
+    .toolbar button { background: var(--accent); color: white; }
     .toolbar a.export { background: #047857; color: white; }
+
+    .kpis { display: flex; gap: 16px; margin-bottom: 32px; }
+    .kpi { background: white; border-radius: 12px; padding: 18px 22px; box-shadow: 0 1px 3px rgba(0,0,0,.08); flex: 1; display: flex; gap: 14px; align-items: center; }
+    .kpi .icon-badge { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .kpi .label { font-size: 13px; color: var(--muted); margin-bottom: 2px; }
+    .kpi .value { font-size: 24px; font-weight: 700; }
+
+    .main { display: grid; grid-template-columns: 320px 1fr; gap: 24px; }
+    .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+    .card h3 { margin: 0 0 12px; font-size: 14px; color: var(--muted); }
+    .side-cards { display: flex; flex-direction: column; gap: 24px; }
+    .goal-wrap { position: relative; display: flex; align-items: center; justify-content: center; }
+    .goal-pct { position: absolute; font-size: 22px; font-weight: 700; }
   </style>
 </head>
 <body>
-  <h1>Sales Dashboard</h1>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">Automation Co.</div>
+      <nav>
+        <a href="#" class="active"><span class="icon">&#9632;</span> Dashboard</a>
+        <a href="#"><span class="icon">&#128202;</span> Reports</a>
+        <a href="#"><span class="icon">&#128279;</span> Integrations</a>
+        <a href="#"><span class="icon">&#9881;</span> Settings</a>
+      </nav>
+    </aside>
 
-  <form class="toolbar" method="get">
-    <div><label>From</label><input type="date" name="start" value="{{ start }}"></div>
-    <div><label>To</label><input type="date" name="end" value="{{ end }}"></div>
-    <button type="submit">Apply filter</button>
-    <a class="export" href="/export.csv?start={{ start }}&end={{ end }}">Export CSV</a>
-  </form>
+    <div class="content">
+      <h1>Sales Dashboard</h1>
 
-  <div class="kpis">
-    <div class="kpi"><div class="label">Total Revenue</div><div class="value">฿{{ total_revenue }}</div></div>
-    <div class="kpi"><div class="label">Total Orders</div><div class="value">{{ total_orders }}</div></div>
-    <div class="kpi"><div class="label">Avg Order Value</div><div class="value">฿{{ avg_order }}</div></div>
-  </div>
+      <form class="toolbar" method="get">
+        <div><label>From</label><input type="date" name="start" value="{{ start }}"></div>
+        <div><label>To</label><input type="date" name="end" value="{{ end }}"></div>
+        <button type="submit">Apply filter</button>
+        <a class="export" href="/export.csv?start={{ start }}&end={{ end }}">Export CSV</a>
+      </form>
 
-  <div class="charts">
-    <div class="card">
-      <canvas id="bySource"></canvas>
-    </div>
-    <div class="card">
-      <canvas id="byDay"></canvas>
+      <div class="kpis">
+        <div class="kpi">
+          <div class="icon-badge" style="background:#eef2ff;">&#128176;</div>
+          <div><div class="label">Total Revenue</div><div class="value">฿{{ total_revenue }}</div></div>
+        </div>
+        <div class="kpi">
+          <div class="icon-badge" style="background:#ecfdf5;">&#128230;</div>
+          <div><div class="label">Total Orders</div><div class="value">{{ total_orders }}</div></div>
+        </div>
+        <div class="kpi">
+          <div class="icon-badge" style="background:#fffbeb;">&#128200;</div>
+          <div><div class="label">Avg Order Value</div><div class="value">฿{{ avg_order }}</div></div>
+        </div>
+      </div>
+
+      <div class="main">
+        <div class="side-cards">
+          <div class="card">
+            <h3>Revenue goal</h3>
+            <div class="goal-wrap">
+              <canvas id="goalChart" width="160" height="160"></canvas>
+              <div class="goal-pct">{{ goal_pct }}%</div>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Revenue by source</h3>
+            <canvas id="bySource"></canvas>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Revenue by day</h3>
+          <canvas id="byDay"></canvas>
+        </div>
+      </div>
     </div>
   </div>
 
   <script>
+    new Chart(document.getElementById('goalChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Achieved', 'Remaining'],
+        datasets: [{ data: [{{ goal_pct }}, {{ 100 - goal_pct }}], backgroundColor: ['#4f46e5', '#e5e7eb'], borderWidth: 0 }]
+      },
+      options: { cutout: '75%', plugins: { legend: { display: false } } }
+    });
     new Chart(document.getElementById('bySource'), {
       type: 'bar',
       data: {
         labels: {{ source_labels | tojson }},
-        datasets: [{ label: 'Revenue by source', data: {{ source_values | tojson }}, backgroundColor: '#4f46e5' }]
-      }
+        datasets: [{ label: 'Revenue by source', data: {{ source_values | tojson }}, backgroundColor: '#4f46e5', borderRadius: 6 }]
+      },
+      options: { plugins: { legend: { display: false } } }
     });
     new Chart(document.getElementById('byDay'), {
       type: 'line',
